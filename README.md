@@ -29,3 +29,24 @@ int solution(vector<int> numbers, int target)
     return answer;
 }
 ```
+
+## 최소 공배수 && 최대 공약수
+
+```c
+int gcd(int n,int m)
+{
+    int c;
+    while( m != 0)
+    {
+        c = n % m;
+        n = m;
+        m = c;
+    }
+    return n;
+}
+
+int lcm(int n, int m)
+{
+    return n * m / gcd(n,m);   
+}
+```
