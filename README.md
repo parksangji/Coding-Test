@@ -125,3 +125,49 @@ bool isPrime(int n)
     
 }
 ```
+
+## 순열 
+
+수학적으로 순열이란 서로 다른 n개의 원소에서 r개를 뽑아 한 줄로 세우는 경우의 수를 말한다. 원소를 한 줄로 세우기 때문에 원소의 조합이 같더라도 순서가 다르면 다른 방법으로 본다.
+
+ex) {1, 2, 3}의 원소들의 모든 순열을 구한다면 {1, 2, 3}, {1, 3, 2} {2, 1, 3} {2, 3, 1} {3, 1, 2} {3 2 1} 으로 총 6가지가 나온다.
+
+# next_permutation
+
+c++ 의 <algorithm> 헤더에는 n개의 원소의 순열을 구할 수 있는 next_permutation이라는 함수가 있다. 기본적 문법은 다음과 같다.
+    
+```c
+bool next_permutation(BidirectionalIterator first, BidirectionalIterator last};
+
+bool next_permutation(BidirectionalIterator first, BidirectionalIterator last,compare comp};
+```
+
+next_permutaion을 사용할 때는 몇 가지 주의할 점
+
+1. 오름차순으로 정렬된 값을 가진 컨테이너로만 사용가능하다.
+2. defalut로 operator <를 사용해 순열을 생성한다.
+3. 중복이 있는 원소들은 중복을 제외하고 순열을 만들어준다.
+
+next_permutation 사용 예시
+
+```c
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+ 
+int main() {
+    vector<int> v{ 1, 2, 3};
+ 
+    sort(v.begin(), v.end());
+ 
+    do {
+        for (auto it = v.begin(); it != v.end(); ++it)
+            cout << *it << ' ';
+        cout << endl;
+    } while (next_permutation(v.begin(), v.end()));
+}
+
+```
+
+[[Level2] 소수 찾기](https://github.com/parksangji/Coding-Test/blob/main/Level2/Level2-33.cc)
