@@ -106,3 +106,22 @@ greedy algorithm은 문제를 해결하는 과정에서 그 순간순간마다 �
 즉, 점화식을 세울 수 있어야 한다. 4 를 구하는 과정에서 구해서 저장했던 3 을, 5 를 구하는 과정에서도 그대로 쓸 수 있는 문제여야 한다. 동일하게.
 
 [[Level2] 땅따먹기 ](https://github.com/parksangji/Coding-Test/blob/main/Level2/Level2-30.cc)
+
+## 에스토스테네스의 체 (소수 판별)
+
+소수를 판별하기 위해 에라토스테네스의 체를 이용한다. 에라토스테네스의 체를 간단히 설명하자면, 2부터 n까지의 수 중에 소수를 판별하기 위한 알고리즘이다. 소수를 찾으면 해당 수의 배수를 모두 지워나가는 방식이다.
+
+![image](https://user-images.githubusercontent.com/59435705/119635635-db3f0900-be4e-11eb-8e45-bf076fa1e47c.png)
+
+
+```c
+bool isPrime(int n)
+{
+    if(n < 2) return false;
+    
+    for(int i = 2; i <= sqrt(n) ; i++) if(n % i == 0) return false;
+    
+    return true;
+    
+}
+```
