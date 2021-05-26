@@ -240,3 +240,94 @@ abnormal, abnomality, abnomalities, abnormalization
 결론적으로 key를 이용하여 정렬을 해야 하는 경우를 제외하고 대량의 데이터를 저장할 때는 unordered_map 을 사용하는걸 추천합니다.
 
 [[Level2] 위장](https://github.com/parksangji/Coding-Test/blob/main/Level2/Level2-34.cc)
+
+
+## 다익스트라 알고리즘
+
+다익스트라 알고리즘은 한점을 기준으로 나머지 모든 점에 대해서 최단거리를 구하는 것.
+
+다익스트라는 모든 가중치가 음수가 아닐때만 사용이 가능하다.
+
+기본원리 :
+1. 방문하지 않은 점중 값이 가장 작은 점을 방문한다.
+2. 그 점을 통해서 갈 수 있는 점 중에서 아직 방문하지 않은 점의 값이 이전에 기록한 값보다 작으면 그 거리를 갱신한다.
+
+![image](https://user-images.githubusercontent.com/59435705/119686178-093d4100-be81-11eb-9b44-252a2984f216.png)
+
+cost는 해당 점을 가기 위한 값을 기록하는 배열이며, 0번을 시작점으로 해서 0번에서 갈 수 있는 모든점에 대해 최단거리를 구하는 것이다.
+
+아직 각 점들에 대한 거리를 모르기때문에 무한대로 초기화한다.
+
+![image](https://user-images.githubusercontent.com/59435705/119686195-0e01f500-be81-11eb-8962-cd63f1e3f6c7.png)
+
+0번 점을 방문하고 0번점에서 갈 수 있는 1,2,3번 점에대해 기존에 cost배열에 있는 값과 0에서 가는 값을 비교해서 작을 경우 갱신해준다.
+
+![image](https://user-images.githubusercontent.com/59435705/119686208-11957c00-be81-11eb-87af-ecce0cde496a.png)
+
+방문하지 않은 점 1,2,3,4,5 중에서 값이 가장 작은 점 1 을 방문한다.
+1을 통해서 갈 수 있는 점 2,4,5 에 가는 거리는 0번에서 1번으로 가는 거리 5에서 1에서 각 점으로 가는 거리 1,2,5를 더해준다.
+
+2,4,5 모두 ㅂ을 통해서 가는 거리가 더 짧음으로 2,4,5 점의 값을 갱신해준다.
+
+![image](https://user-images.githubusercontent.com/59435705/119686218-15290300-be81-11eb-9973-7b28dccddb2a.png)
+![image](https://user-images.githubusercontent.com/59435705/119686237-19552080-be81-11eb-820a-4efbc1e8a8f6.png)
+![image](https://user-images.githubusercontent.com/59435705/119686253-1ce8a780-be81-11eb-8c5e-70f282a157df.png)
+![image](https://user-images.githubusercontent.com/59435705/119686265-207c2e80-be81-11eb-824a-528bdae2f7eb.png)
+
+[[Level2] 배달](https://github.com/parksangji/Coding-Test/blob/main/Level2/Level2-36.cc)
+
+```c
+#include <iostream>
+#include <vector>
+#include <queue>
+
+#define INF 1e9
+
+using namespace std;
+
+int solution(int N, vector<vector<int> > road, int K) {
+    int answer = 0;
+    
+    vector<pair<int,int>> table[51];
+    vector<int> dist(51,INF); /*최단거리를 갱신해주는 배열 , dist 값을 무한대로 초기화*/
+    priority_queue<pair<int,int>> pq;
+    
+    for(auto v : road)
+    {
+        table[v[0]].push_back({v[1],v[2]}); /*from, to, value*/
+        table[v[1]].push_back({v[0],v[2]}); /*from, to, value*/
+    }
+    
+    pq.push({0,1});/*우선 순위 큐에 시작점과 cost 삽입*/
+    dist[1] = 0; /*시작점의 최단거리를 갱신*/
+    
+    while(!pq.empty())
+    {
+        int cost = pq.top().first; /*cost는 다음 방문할 점의 dist*/
+        int cur = pq.top().second; /*cur을 방문할 점의 번호*/
+        
+        pq.pop();
+        
+        for(int i=0; i< table[cur].size(); i++)
+        {
+            int next = table[cur][i].first;
+            int next_cost = table[cur][i].second;
+            
+            if(dist[next] > dist[cur] + next_cost)
+            {
+                dist[next] = dist[cur] + next_cost;
+                pq.push({-dist[next],next});
+            }
+        }
+    }
+    for(int i=1; i<=N; i++) /*문제 조건 대입*/
+    {
+        if(dist[i] <= K) answer++;
+    }
+    return answer;
+}
+```
+
+
+
+
