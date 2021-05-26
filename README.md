@@ -171,3 +171,72 @@ int main() {
 ```
 
 [[Level2] 소수 찾기](https://github.com/parksangji/Coding-Test/blob/main/Level2/Level2-33.cc)
+
+
+## 해쉬 (map 과 unordered_map)
+
+unordered_map
+
+unordered_map은 hash_table 기반의 hash container입니다. 
+
+hash_table을 통해 참조를 하기 때문에 각 node들을 정렬할 필요가 없습니다. 
+
+따라서 충분한 hash_table의 크기만 주어진다면 데이터 양이 많아지더라도 Search / Insert / Delete 성능을 꾸준하게 보장할 수 있습니다. 
+
+성능 비교 
+
+map 과 hash_map 은 알고리즘 특성 상 키의 데이터 타입이 숫자일 때와 문자열일 때 현격한 차이를 보입니다. 
+
+따라서 성능 비교도 숫자형 키를 사용할 때와 문자열 키를 사용할 때를 따로 비교해야 합니다. 
+
+아래와 같이 container에 데이터를 insert 한 뒤 find를 반복적으로 수행한 시간을 기록합니다.
+
+X 축은 데이터 크기 N, Y 축은 탐색 1회에 걸린 시간(마이크로초) 입니다.
+
+map은 O(logN) 의 시간복잡도를 보이며 급격히 소요시간이 증가한 구간은 캐시 미스로 인해 발생한 것으로 추측됩니다. 
+
+그에 반해 unordered_map 은 O(1) 의 시간 복잡도를 보여줍니다. 
+
+이처럼 숫자형 키를 사용할 경우 데이터의 양이 많아질수록 unordered_map이 월등한 성능을 보여주게됩니다.
+Key Type : const char*
+ 
+문자열을 키로 사용할 경우는 조금 복잡합니다. 
+
+map은 insert 할 때 key를 기반으로 정렬하게 되는데 문자열 비교 함수의 성능은 문자열 전체를 hashing 하는 것에 비해 우수합니다. 
+
+그것은 문자열 전체를 비교하지 않고 앞에서부터 한글자씩 차례로 비교하여 크고 작음을 가려내기 때문에 문자열의 길이가 길어지더라도 민감하게 반응하지 않습니다. 
+
+key value들의 분포가 고르게 형성되어 있어 앞의 몇 글자만 비교해서 우열이 가려질 가능성이 있기 때문이죠. 
+
+예를 들어 문자열 key의 집합이 다음과 같다고 했을 때, 
+
+black, blue, cyan, gray, green, lime, magenta, maroon,
+navy, olive, purple, red, silver, teal, white, yellow
+ 
+
+앞의 1~2글자만 비교하면 대부분의 문자열 비교가 끝나게 됩니다.
+
+반면 문자열의 길이가 길어지면 key를 hashing 하는 unordered_map의 경우 성능에 영향을 상대적으로 많이 받게 됩니다. 
+
+따라서 문자열의 길이를 4, 8, 12, 16 으로 측정을 했을 때 아래와 같은 결과를 확인할 수 있습니다.
+
+X 축은 데이터 크기 N, Y 축은 탐색 1회에 걸린 시간(마이크로초) 입니다.
+기본적으로 숫자형 key와 비슷한 양상을 보이며, 문자열 길이가 커짐에 따라 교차점이 달라짐을 확인할 수 있습니다.
+
+물론 key의 집합이 다음과 같이 접두사가 비슷한 경우라면 map도 문자열 길이의 영향을 더 크게 받게 됩니다. 
+
+abnormal, abnomality, abnomalities, abnormalization
+ 
+그렇기 때문에 키 값을 timestamp를 이용해 만들어 사용하는 경우에 문자열의 앞부분이 같은 표본이 대량으로 생성되어
+
+비교함수의 성능이 떨어지므로 지양해야 합니다. (실제 사례)
+
+결론
+데이터가 많은 경우에는 unordered_map 이 map 보다 성능면에서 유리합니다. 
+문자열을 키로 사용하는 경우 문자열이 길어질 수록 unordered_map 이 map에 비해 더 성능이 떨어질 수 있습니다. 
+유사도가 높은 문자열 집합을 키로 사용하는 경우에 map 의 성능이 떨어질 수 있습니다. 
+ 
+
+결론적으로 key를 이용하여 정렬을 해야 하는 경우를 제외하고 대량의 데이터를 저장할 때는 unordered_map 을 사용하는걸 추천합니다.
+
+[[Level2] 위장](https://github.com/parksangji/Coding-Test/blob/main/Level2/Level2-34.cc)
