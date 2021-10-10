@@ -4,18 +4,47 @@
 
 using namespace std;
 
-int dx[] = {0,1,1,1,0,-1,-1,-1};
-int dy[] = {-1,-1,0,1,1,1,0,-1}; 
-
-
-void dfs(vector<vector<bool>>& visited,int x,int y)
+bool queen(vector<vector<bool>>& visited,int x,int y)
 {
-    for(int i=0; i<8; i++)
+    int xx,yy;
+    xx = x-1;
+    yy = y;
+    while(xx >= 0)
     {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
+        if(visited[xx][yy]) return false;
+        xx --;
+    }
+    xx = x - 1;
+    yy = y - 1;
+    while(xx >=0 and yy >=0)
+    {
+        if(visited[xx][yy]) return false;
+        xx --;
+        yy --;
+    }
+    xx = x - 1;
+    yy = y + 1;
+    while(xx >=0 and yy < visited.size())
+    {
+        if(visited[xx][yy]) return false;
+        xx --;
+        yy ++;
+    }
+    return true;
+}
 
-        if(nx >= 0 and ny >= 0)
+void dfs(vector<vector<bool>>& visited,int x,int& answer)
+{
+    if(x == visited.size())
+    {
+        answer++;
+        return;
+    }
+    for(int i=0; i<visited.size(); i++)
+    {
+        visited[x][i] = true;
+        if(queen(visited,x,i)) dfs(visited,x+1,answer);
+        visited[x][i] = false;
     }
 }
 
@@ -25,16 +54,6 @@ int main(void)
     cin >> n;
     vector<vector<bool>> visited(n,vector<bool>(n,false));
 
-    for(int i=0; i<n; i++)
-    {
-        for(int j=0; j<n; j++)
-        {
-            if(!visited[i][j])
-            {
-                visited[i][j] = true;
-                answer++;
-
-            }
-        }
-    }
+    dfs(visited,0,answer);
+    cout << answer ;
 }
